@@ -88,5 +88,14 @@ def scrap_all_pages(base_url: str, max_pages: int, column_names: list[str]) -> p
     df = pd.DataFrame(all_products, columns=column_names)
     return get_timestamp(df, "included_in")
 
+def save_to_db(df: pd.DataFrame, db_path: Path, table_name: str = "offers"):
+    """Save the DataFrame to a SQLite database"""
+    conn = sqlite3.connect(db_path)
+    df.to_sql(table_name, conn, if_exists="append", index=False)
+    conn.close()
+
 if __name__ == "__main__":
     offers = scrap_all_pages(URL, MAX_PAGES, ["product", "price", "discount"])
+    save_to_db(offers, DB_PATH, "offers")
+    print(f"Scraped {len(offers)} items and saved to database.")
+
