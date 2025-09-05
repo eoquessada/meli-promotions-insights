@@ -13,8 +13,15 @@ DB_PATH = Path("../scraper.db")
 
 def get_response_text(url: str) -> str | None:
     """Fetch the content of the given URL and return the response text"""
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/114.0.0.0 Safari/537.36"
+        )
+    }
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         return response.text
     except requests.RequestException as e:
