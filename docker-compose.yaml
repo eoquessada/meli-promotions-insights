@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  airflow-init:
+    image: custom-airflow:2.9.1
+    env_file:
+      - .env
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./logs:/opt/airflow/logs
+    entrypoint: >
+      bash -c "airflow db init &&
+      airflow users create --username ${_AIRFLOW_WWW_USER_USERNAME} --firstname ${_AIRFLOW_WWW_USER_FIRSTNAME} --lastname ${_AIRFLOW_WWW_USER_LASTNAME} --role Admin --email ${_AIRFLOW_WWW_USER_EMAIL} --password ${_AIRFLOW_WWW_USER_PASSWORD}"
+
+  airflow-webserver:
+    build: .
+    image: custom-airflow:2.9.1
+    container_name: airflow-webserver
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./logs:/opt/airflow/logs
+    command: webserver
+    restart: always
+    depends_on:
+      - airflow-init
+
+  airflow-scheduler:
+    image: custom-airflow:2.9.1
+    container_name: airflow-scheduler
+    env_file:
+      - .env
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./logs:/opt/airflow/logs
+    command: scheduler
+    restart: always
+    depends_on:
+      - airflow-init

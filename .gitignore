@@ -1,26 +1,43 @@
-# Virtual environment
-venv/
-.venv/
-
-# Python cache
+# =====================================
+# Python
+# =====================================
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# Banco de dados local
-*.db
-*.sqlite3
-
-# Logs
 *.log
-logs/
+*.sqlite3
+*.db
+.env
 
+# Virtual env
+venv/
+Venv/
+ENV/
+env/
+
+# =====================================
 # Airflow
-airflow/airflow.db
-airflow/airflow.cfg
-airflow/airflow-webserver.pid
+# =====================================
+# Pastas de logs do Airflow
 logs/
+# Banco de metadados do Airflow (se usar SQLite local)
+airflow.db
+# Config gerada pelo Airflow
+airflow.cfg
+# Pastas criadas pelo Airflow Scheduler
+unittests.cfg
 
-# VSCode
+# =====================================
+# Docker
+# =====================================
+# Volumes locais (se montar pastas externas)
+docker_data/
+.docker/
+.docker-compose/
+
+# =====================================
+# VSCode / IDEs
+# =====================================
 .vscode/
+.idea/
